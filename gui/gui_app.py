@@ -14,7 +14,7 @@ def start_download():
 root = tk.Tk()
 root.title("Pharmaceutical Trial Data Downloader")
 
-tk.Label(root, text="Enter Date (YYYY-MM-DD):").pack(pady=5)
+tk.Label(root, text="Enter Date (DD-MM-YYYY):").pack(pady=5)
 date_entry = tk.Entry(root)
 date_entry.pack(pady=5)
 
