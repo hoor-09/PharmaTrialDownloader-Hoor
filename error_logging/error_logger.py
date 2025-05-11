@@ -1,3 +1,6 @@
+import json
+import os
+from datetime import datetime
 import requests
 
 def get_guid():
@@ -10,6 +13,30 @@ def get_guid():
     except Exception as e:
         return f"Exception occurred: {str(e)}"
 
-# Run this only if the script is executed directly
+def log_error(filename, error_messages, log_file='error_log.json'):
+    entry = {
+        "guid": get_guid(),
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "filename": filename,
+        "errors": error_messages
+    }
+
+    # If file exists, read old data, else start fresh
+    if os.path.exists(log_file):
+        with open(log_file, 'r') as f:
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError:
+                data = []
+    else:
+        data = []
+
+    data.append(entry)
+
+    with open(log_file, 'w') as f:
+        json.dump(data, f, indent=4)
+
+# Optional: test it
 if __name__ == "__main__":
-    print("Generated UUID:", get_guid())
+    sample_errors = ["Missing header", "Invalid reading value"]
+    log_error("test_file.csv", sample_errors)
