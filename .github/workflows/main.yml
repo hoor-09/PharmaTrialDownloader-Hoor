@@ -1,34 +1,29 @@
-name: CI/CD Pipeline
+name: Pharma Data Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
-  build-and-test:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10' 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-        pip install pytest
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: Run tests
-      run: |
-        pytest test_csv_validation.py
-
-    - name: Build Docker image
-      run: |
-        docker build -t csv-validator .
-
+      - name: Run unit tests with unittest
+        run: |
+          python -m unittest discover -s . -p "test_*.py" -v
