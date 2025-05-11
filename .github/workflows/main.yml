@@ -20,9 +20,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pytest
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest  # in case it's not in requirements.txt
 
-      - name: Run unit tests
+      - name: Run unit tests with pytest
         run: |
           pytest
 
